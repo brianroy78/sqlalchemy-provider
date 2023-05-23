@@ -1,4 +1,6 @@
 import glob
+import os
+from configparser import ConfigParser
 from os.path import dirname, basename, isfile, join
 from typing import Optional
 
@@ -27,3 +29,27 @@ def set_settings(url: str):
 
 def get_session() -> Session:
     return Data.SESSION_MAKER()
+
+
+def connect():
+    set_settings(_get_settings()['DEFAULT']['sqlalchemy.url'])
+
+
+def connect_get_session():
+    connect()
+    return get_session()
+
+
+def create_database():
+    connect()
+    Base.metadata.create_all(Data.ENGINE)
+
+
+def remove_sqlite_db():
+    os.remove(_get_settings()['DEFAULT']['sqlalchemy.url'].split('/')[-1])
+
+
+def _get_settings():
+    config = ConfigParser()
+    config.read('settings.ini')
+    return config
