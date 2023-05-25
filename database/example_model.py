@@ -1,11 +1,11 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship, relation
+from sqlalchemy.orm import relationship
 
-from models import Base
+from database import Base
 
 
 class Example(Base):
-    __tablename__ = 'example'
+    __tablename__ = "example"
     id = Column(Integer, primary_key=True)
     column1 = Column(String(80), unique=True, nullable=False)
     column2 = Column(String(120), unique=True, nullable=False)
@@ -14,17 +14,17 @@ class Example(Base):
     children = relationship("Child")
 
     def __repr__(self):
-        return '<Example %r>' % self.column1
+        return "<Example %r>" % self.column1
 
 
 class Child(Base):
-    __tablename__ = 'child'
+    __tablename__ = "child"
     id = Column(Integer, primary_key=True)
     column1 = Column(String(80), unique=True, nullable=False)
     column2 = Column(String(120), unique=True, nullable=False)
-    parent_id = Column(Integer, ForeignKey("parent.id"))
+    parent_id = Column(Integer, ForeignKey("example.id"))
 
-    parent = relation('Example')
+    parent = relationship("Example")
 
     def __repr__(self):
-        return '<Example %r>' % self.column1
+        return "<Example %r>" % self.column1
