@@ -1,5 +1,6 @@
 import os
 from configparser import ConfigParser
+from os.path import exists
 from typing import Optional
 
 from sqlalchemy import create_engine
@@ -41,10 +42,14 @@ def connect_get_session():
 def create_database():
     connect()
     Base.metadata.create_all(Data.ENGINE)
+    print('SQLite db created!')
 
 
 def remove_sqlite_db():
-    os.remove(_get_settings()["sqlalchemy.url"].split("/")[-1])
+    path = _get_settings()["sqlalchemy.url"].split("/")[-1]
+    if exists(path):
+        os.remove(path)
+        print('SQLite db removed!')
 
 
 def _get_settings():
