@@ -1,4 +1,0 @@
-sqlalchemy
-black[d]
-mypy
-alembic
